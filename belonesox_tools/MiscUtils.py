@@ -151,7 +151,11 @@ def transaction(atarget, asource, action, options=None,  update_time = None, loc
 
     res_act = False
     # if options:
-    res_act = action(tmp, source, options)
+    try:
+        res_act = action(tmp, source, options)
+    except TypeError as ex_:
+        res_act = action(tmp, source)
+        
     # else:    
     #     res_act = action(tmp, source)
     if res_act and file_is_ok(tmp):
