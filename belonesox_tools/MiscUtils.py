@@ -150,10 +150,10 @@ def transaction(atarget, asource, action, options=None,  update_time = None, loc
     lock_handle = open(lock_file, 'w')
 
     res_act = False
-    # if options:
-    res_act = action(tmp, source, options)
-    # else:    
-    #     res_act = action(tmp, source)
+    try:
+        res_act = action(tmp, source, options)
+    except TypeError as ex_:
+        res_act = action(tmp, source)
     if res_act and file_is_ok(tmp):
         if os.path.exists(target):
             bak = os.path.join(directory, "~~bak--" + nameext)
