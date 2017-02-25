@@ -18,6 +18,9 @@ import glob
 import trans
 import yaml
 
+
+re_s2l = re.compile(r"((\d\d)?(?P<year>\d\d))[-_](?P<month>\d\d)[-_](?P<day>\d\d)[-_](?P<hh>\d\d)[-_](?P<mm>\d\d)[-_](?P<ss>\d\d).*")
+
 def data2pickle(data, filename):
     lfile = open(filename, "w")
     p = pickle.Pickler(lfile)
@@ -147,10 +150,10 @@ def transaction(atarget, asource, action, options=None,  update_time = None, loc
     lock_handle = open(lock_file, 'w')
 
     res_act = False
-    if options is not None:
-        res_act = action(tmp, source, options)
-    else:    
-        res_act = action(tmp, source)
+    # if options:
+    res_act = action(tmp, source, options)
+    # else:    
+    #     res_act = action(tmp, source)
     if res_act and file_is_ok(tmp):
         if os.path.exists(target):
             bak = os.path.join(directory, "~~bak--" + nameext)
@@ -519,7 +522,7 @@ def is_debug():
     return False
 
 re_s2l = re.compile(r"((\d\d)?(?P<year>\d\d))[-_](?P<month>\d\d)[-_](?P<day>\d\d)[-_](?P<hh>\d\d)[-_](?P<mm>\d\d)[-_](?P<ss>\d\d).*")
-re_s2l_ms = re.compile(r"((\d\d)?(?P<year>\d\d))[-_](?P<month>\d\d)[-_](?P<day>\d\d)[-_](?P<hh>\d\d)[-_](?P<mm>\d\d)[-_](?P<ss>\d\d)[-_](?P<ms>\d\d).*")
+re_s2l_ms = re.compile(r"((\d\d)?(?P<year>\d\d))[-_](?P<month>\d\d)[-_](?P<day>\d\d)[-_](?P<hh>\d\d)[-_](?P<mm>\d\d)[-_](?P<ss>\d\d)[-_](?P<ms>\d\d\d).*")
 
 def guess_creation_time_by_name(filename):
     _, nameext = os.path.split(filename)
@@ -534,7 +537,7 @@ def guess_creation_time_by_name(filename):
             mre = re_s2l_ms.match(nameext)
             if mre:
                 ms = int(mre.group('ms'))
-                cur_ctime += datetime.datetime.timedelta(microseconds=ms*1000)
+                cur_ctime += datetime.timedelta(microseconds=ms*1000)
             return cur_ctime 
         except ValueError:
             pass
