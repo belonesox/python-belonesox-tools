@@ -16,6 +16,7 @@ setup(
     author_email="stanislav.fomin@gmail.com",
     install_requires=[
         'pyyaml',
+        'trans',
         'pytz',
     ],
 )
