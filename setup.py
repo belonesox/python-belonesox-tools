@@ -11,8 +11,12 @@ from setuptools import setup
 
 setup(
     name='belonesox_tools',
-    version='1.0',
+    version='1.0.1',
     packages=['belonesox_tools'],
-    author_email = "stanislav.fomin@gmail.com",
+    author_email="stanislav.fomin@gmail.com",
+    install_requires=[
+        'yaml',
+        'pytz',
+    ],
 )
 
