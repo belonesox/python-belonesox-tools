@@ -15,7 +15,7 @@ setup(
     packages=['belonesox_tools'],
     author_email="stanislav.fomin@gmail.com",
     install_requires=[
-        'yaml',
+        'pyyaml',
         'pytz',
     ],
 )
