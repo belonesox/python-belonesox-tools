@@ -11,7 +11,7 @@ from setuptools import setup
 
 setup(
     name='belonesox_tools',
-    version='1.0.1',
+    version='1.0.2',
     packages=['belonesox_tools'],
     author_email="stanislav.fomin@gmail.com",
     install_requires=[
