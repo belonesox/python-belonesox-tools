@@ -1,8 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
   Collection of all auxiliary utilities.
 """
+from __future__ import print_function
+
 import sys
 import os
 import time
@@ -13,10 +15,14 @@ import shutil
 import errno
 import stat
 import subprocess
-import cPickle as pickle
+if sys.version_info[0] < 3:
+    import cPickle as pickle
+else:
+    import pickle
 import glob
 import trans
 import yaml
+
 
 
 re_s2l = re.compile(r"((\d\d)?(?P<year>\d\d))[-_](?P<month>\d\d)[-_](?P<day>\d\d)[-_](?P<hh>\d\d)[-_](?P<mm>\d\d)[-_](?P<ss>\d\d).*")
@@ -27,7 +33,7 @@ def data2pickle(data, filename):
     p.dump(data)
     lfile.close()
 
-def pickle2data(filename):
+def pickle2data(filename):  
     lf = open(filename, 'r')
     data  = pickle.load(lf)
     lf.close()
@@ -40,8 +46,9 @@ def yaml2data(filename):
     data = None
     try:
         data = yaml.load(stream)
-    except yaml.YAMLError, err:
-        print err
+    except yaml.YAMLError as err:
+        print(err)
+        pass
     stream.close()
     return data
 
@@ -315,7 +322,7 @@ c:\\app\docstruct\\python27\\python %(script)s %%1 %%2 %%3 %%4 %%5 %%6 %%7 %%8 %
 """ % vars()
         lf.write(ls)
         lf.close()
-        print batfile, "installed..."
+        print(batfile, "installed...")
         sys.exit(0)
 
 def get_run_dir():
@@ -365,7 +372,7 @@ def get_prog_output_with_log(scmd):
     while True:
         line = progout.readline()
         if line:
-            print unicodeanyway(line).encode("utf8"),
+            print(unicodeanyway(line).encode("utf8"))
             soutlines.append(line)
         else:
             break
@@ -449,17 +456,17 @@ def copytree(src, dst):
                 copytree(srcname, dstname)
             else:
                 shutil.copy2(srcname, dstname)
-        except EnvironmentError, why:
+        except EnvironmentError as why:
             errors.append((srcname, dstname, str(why)))
     try:
         shutil.copystat(src, dst)
-    except OSError, why:
+    except OSError as why:
         if WindowsError is not None and isinstance(why, WindowsError):
             pass
         else:
             errors.extend((src, dst, str(why)))
     if errors:
-        raise EnvironmentError, errors
+        raise EnvironmentError(errors)
 
 def time2ms(timeframe):
     basetime = datetime.datetime.strptime('0:00.0', '%M:%S.%f')
