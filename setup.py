@@ -11,7 +11,7 @@ from setuptools import setup
 
 setup(
     name='belonesox_tools',
-    version='1.0',
+    version='1.1',
     packages=['belonesox_tools'],
     author_email = "stanislav.fomin@gmail.com",
 )

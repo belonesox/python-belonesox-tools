@@ -17,7 +17,8 @@ import cPickle as pickle
 import glob
 import trans
 import yaml
-
+import inspect
+#import threading
 
 re_s2l = re.compile(r"((\d\d)?(?P<year>\d\d))[-_](?P<month>\d\d)[-_](?P<day>\d\d)[-_](?P<hh>\d\d)[-_](?P<mm>\d\d)[-_](?P<ss>\d\d).*")
 
@@ -146,13 +147,14 @@ def transaction(atarget, asource, action, options=None,  update_time = None, loc
     
 
     createdir(lock_dir)
-    hidefile(lock_dir)
+#    print "Thread ",  threading.current_thread(), " lock ", lock_file
     lock_handle = open(lock_file, 'w')
+    hidefile(lock_dir)
 
     res_act = False
-    try:
+    if len(inspect.getargspec(action).args) == 4:
         res_act = action(tmp, source, options)
-    except TypeError as ex_:
+    else:    
         res_act = action(tmp, source)
     if res_act and file_is_ok(tmp):
         if os.path.exists(target):
@@ -164,6 +166,7 @@ def transaction(atarget, asource, action, options=None,  update_time = None, loc
         shutil.move(tmp, target)
 
     lock_handle.close()
+#    print "Thread ",  threading.current_thread(), " unlock ", lock_file
     removedirorfile(lock_dir)
 
 
@@ -270,6 +273,9 @@ def removedirorfile(p, olderthan=None):
         """
         Make readonly files writeable and try to resume deletion.
         """
+        # print "error on path", path
+        # print exc_info
+        # time.sleep(2000)
         if not os.access(path, os.W_OK):
             # Is the error an access error ?
             os.chmod(path, stat.S_IWUSR)
@@ -284,7 +290,16 @@ def removedirorfile(p, olderthan=None):
         if not os.path.exists(p):
             return
         if os.path.isdir(p):
+            # scmd = "handle " + os.path.abspath(p)
+            # os.system(scmd)
             shutil.rmtree(p, ignore_errors=False, onerror=_onerror)
+            # for try_ in xrange(1):
+            #     try:
+            #         shutil.rmtree(p, ignore_errors=False, onerror=_onerror)
+            #         break
+            #     except:
+            #         time.sleep(2)
+            #         pass
         else:
             needremove = True
             if olderthan:
