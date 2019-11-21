@@ -13,6 +13,11 @@ setup(
     name='belonesox_tools',
     version='1.1',
     packages=['belonesox_tools'],
-    author_email = "stanislav.fomin@gmail.com",
+    author_email="stanislav.fomin@gmail.com",
+    install_requires=[
+        'pyyaml',
+        'trans',
+        'pytz',
+    ],
 )
 
