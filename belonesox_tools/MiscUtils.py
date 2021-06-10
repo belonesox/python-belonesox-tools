@@ -105,17 +105,17 @@ def date822(date):
 def short_uniq_filename(source):
     ufilename = unicodeanyway(source)
     dirname, nameext = os.path.split(ufilename)
-    sshortname = '-'.join([nameext[:8].encode('trans'), 
+    sshortname = '-'.join([trans.trans(nameext[:8]), 
                            hash4string(nameext), 
-                           nameext[-4:].encode('trans')])
+                           trans.trans(nameext[-4:])])
     return os.path.join(dirname, sshortname) 
 
 def short_uniq_filename_ext(source):
     ufilename = unicodeanyway(source)
     dirname, nameext = os.path.split(ufilename)
-    sshortname = '-'.join([nameext[:4].encode('trans'), 
+    sshortname = '-'.join([trans.trans(nameext[:4]), 
                            hash4string(nameext), 
-                           nameext[-64:].encode('trans')])
+                           trans.trans(nameext[-64:])])
     return os.path.join(dirname, sshortname) 
     
 
@@ -123,7 +123,7 @@ def console_log(message):
     try:
         print(message)
     except UnicodeEncodeError:
-        print(message.encode('trans'))
+        print(trans.trans(message))
     
 
 def transaction(atarget, asource, action, options=None,  update_time = None, locktarget = True):
